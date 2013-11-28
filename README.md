@@ -7,5 +7,6 @@ This is a project I started for my EPQ in September
 - Calculator Functions
 - Solving Quadratics / Cubics
 - Sorting Algorithms
+
 =====================================================
 Algebriac Calculator Designed and Coded by Calum Webb
