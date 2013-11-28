@@ -1,4 +1,4 @@
-package SCREEN;
+package main;
 
 import java.awt.CardLayout;
 import java.awt.EventQueue;
@@ -20,6 +20,10 @@ import java.awt.event.ItemEvent;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
+import backend.Pi;
+import backend.QuadraticEquation;
+import backend.Sort;
+
 import java.awt.Component;
 
 import javax.swing.JTextField;
@@ -29,10 +33,6 @@ import java.awt.Font;
 import java.math.BigDecimal;
 
 import javax.swing.JButton;
-
-import BACKEND.Pi;
-import BACKEND.QuadraticEquation;
-
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.border.TitledBorder;
@@ -41,6 +41,9 @@ import javax.swing.text.JTextComponent;
 
 import java.awt.Color;
 import java.awt.SystemColor;
+
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 @SuppressWarnings("serial")
 public class mainScreen extends JFrame {
@@ -63,6 +66,12 @@ public class mainScreen extends JFrame {
 	Double qa, qb, qc;
 	String quadRoot2, quadRoot1;
 	
+	// Sorting variables
+	Sort sort = new Sort();
+	String sortString;
+	int[] numbers;
+	
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -79,13 +88,11 @@ public class mainScreen extends JFrame {
 	}
 	
 	
-	 // initialising the screen
 	public mainScreen() {
 		setTitle("Algebriac Calculator");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 900, 600);
 		
-		// Menu bar initliasing
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
@@ -137,6 +144,16 @@ public class mainScreen extends JFrame {
 		});
 		mnFunctions.add(mntmQuadratic);
 		
+		JMenuItem mntmSorting = new JMenuItem("Sorting");
+		mntmSorting.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CardLayout cl = (CardLayout) (cards.getLayout());
+	            cl.show(cards, "SortingPanel");
+	            System.out.println("SortingPanel selected");
+			}
+		});
+		mnFunctions.add(mntmSorting);
+		
 		JMenu mnHelp = new JMenu("Help");
 		menuBar.add(mnHelp);
 		
@@ -166,12 +183,12 @@ public class mainScreen extends JFrame {
 		JLabel Information = new JLabel("");
 		Information.setEnabled(false);
 		Information.setToolTipText("");
-		Information.setIcon(new ImageIcon(mainScreen.class.getResource("/RES/info.png")));
+		Information.setIcon(new ImageIcon(mainScreen.class.getResource("/resources/info.png")));
 		Information.setBounds(6, 6, 888, 516);
 		Info.add(Information);
 		
 		JLabel Logo = new JLabel("");
-		Logo.setIcon(new ImageIcon(mainScreen.class.getResource("/RES/splashscreen.png")));
+		Logo.setIcon(new ImageIcon(mainScreen.class.getResource("/resources/splashscreen.png")));
 		Logo.setBounds(6, 38, 889, 462);
 		SPLASHSCREEN.add(Logo);
 		
@@ -213,7 +230,7 @@ public class mainScreen extends JFrame {
 		
 		
 		JLabel PiTitle = new JLabel("");
-		PiTitle.setIcon(new ImageIcon(mainScreen.class.getResource("/RES/piTitleBar.png")));
+		PiTitle.setIcon(new ImageIcon(mainScreen.class.getResource("/resources/piTitleBar.png")));
 		PiTitle.setBounds(6, 6, 888, 287);
 		PiPanel.add(PiTitle);
 		
@@ -244,12 +261,12 @@ public class mainScreen extends JFrame {
 		
 	
 		
-		final JTextPane SolutionTextField = new JTextPane();
-		SolutionTextField.setBounds(153, 294, 597, 219);
-		QuadraticPanel.add(SolutionTextField);
-		SolutionTextField.setText("\n");
-		SolutionTextField.setEditable(false);
-		SolutionTextField.setFont(new Font("Myriad Pro", Font.PLAIN, 19));
+		final JTextPane SortingscrollPane = new JTextPane();
+		SortingscrollPane.setBounds(153, 294, 597, 219);
+		QuadraticPanel.add(SortingscrollPane);
+		SortingscrollPane.setText("\n");
+		SortingscrollPane.setEditable(false);
+		SortingscrollPane.setFont(new Font("Myriad Pro", Font.PLAIN, 19));
 		JButton btnNewButton = new JButton("Solve");
 		
 		btnNewButton.addActionListener(new ActionListener() {
@@ -263,12 +280,14 @@ public class mainScreen extends JFrame {
 					quadRoot2 = QuadraticEquation.QuadNeg(qa, qb, qc);
 					
 					if (quadRoot1 == "There are no real roots") {
-						SolutionTextField.setText("There are no real roots for the equation: " + equation );
+						SortingscrollPane.setText("There are no real roots for the equation: " + equation );
+						System.out.println(equation + " can not be solved, as there are no real roots in this equation");
 					} else { 
 						double discr = qb*qb - 4*qa*qc; 
 						double sumRoot = -qb/qa;
 						double proRoot = qc/qa;
-					SolutionTextField.setText("Roots: " + quadRoot1 + quadRoot2 + "\nDiscriminant: " + discr + "\nSum of Roots: " + sumRoot + "\nProduct of Roots: " + proRoot);
+					SortingscrollPane.setText("Roots: " + quadRoot1 + quadRoot2 + "\nDiscriminant: " + discr + "\nSum of Roots: " + sumRoot + "\nProduct of Roots: " + proRoot);
+					System.out.println(equation + " was solved with the roots " + quadRoot1 + quadRoot2);
 				}
 			}
 		});
@@ -278,10 +297,67 @@ public class mainScreen extends JFrame {
 		JLabel QuadEquationTitle = new JLabel("");
 		QuadEquationTitle.setFont(new Font("Myriad Pro", Font.PLAIN, 16));
 		QuadEquationTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		QuadEquationTitle.setIcon(new ImageIcon(mainScreen.class.getResource("/RES/QuadEquation1.png")));
+		QuadEquationTitle.setIcon(new ImageIcon(mainScreen.class.getResource("/resources/QuadEquation1.png")));
 		QuadEquationTitle.setBounds(0, 0, 900, 550);
 		QuadraticPanel.add(QuadEquationTitle);
+		
+		JPanel SortingPanel = new JPanel();
+		cards.add(SortingPanel, "SortingPanel");
+		SortingPanel.setLayout(null);
+		
+		JComboBox SortComboBox = new JComboBox();
+		SortComboBox.setModel(new DefaultComboBoxModel(new String[] {"Bubble Sort"}));
+		SortComboBox.setBounds(98, 165, 216, 27);
+		SortingPanel.add(SortComboBox);
+		
+		final JComboBox OrderComboBox = new JComboBox();
+		OrderComboBox.setModel(new DefaultComboBoxModel(new String[] {"Ascending", "Descending"}));
+		OrderComboBox.setBounds(605, 165, 216, 27);
+		SortingPanel.add(OrderComboBox);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(6, 247, 888, 303);
+		SortingPanel.add(scrollPane);
+		
+		final JTextArea SortInputTextArea = new JTextArea();
+		SortInputTextArea.setLineWrap(true);
+		SortInputTextArea.setWrapStyleWord(true);
+		scrollPane.setViewportView(SortInputTextArea);
 		cards.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{SPLASHSCREEN, Info, Information, Logo, PiPanel}));
+		
+		JButton SortButton = new JButton("Sort List");
+		SortButton.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+		SortButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String order = OrderComboBox.getSelectedItem().toString();
+				sortString = SortInputTextArea.getText();
+				if (order == "Ascending") {
+					numbers = Sort.BubbleSortA(sortString);
+						String temp = SortInputTextArea.getText();
+						SortInputTextArea.setText("");
+					for (int i = 0; i < numbers.length; i++ ) {
+						SortInputTextArea.append(Integer.toString(numbers[i]) + " ");
+					}
+					System.out.println("Sorted " + numbers.length + " numbers using bubble sort in ascending order");
+				} else {
+					numbers = Sort.BubbleSortD(sortString);
+					String temp = SortInputTextArea.getText();
+					SortInputTextArea.setText("");
+				for (int i = 0; i < numbers.length; i++ ) {
+					SortInputTextArea.append(Integer.toString(numbers[i]) + " ");
+				}
+				System.out.println("Sorted " + numbers.length + " numbers using bubble sort in descending order");
+				}
+			}
+		});
+		SortButton.setBounds(673, 19, 189, 40);
+		SortingPanel.add(SortButton);
+		
+		JLabel SortingTitle = new JLabel("");
+		SortingTitle.setIcon(new ImageIcon(mainScreen.class.getResource("/resources/SortingTitleHeader.png")));
+		SortingTitle.setBounds(6, 6, 888, 243);
+		SortingPanel.add(SortingTitle);
+		
 		
 		System.out.println("STARTED SUCCESSFULLY");
 	}
