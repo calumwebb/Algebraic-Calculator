@@ -1,0 +1,3 @@
+13 millis to load the application
+splashscreen selected
+ConsolePanel selected

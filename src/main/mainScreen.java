@@ -30,7 +30,15 @@ import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 
 import java.awt.Font;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JTextArea;
@@ -46,6 +54,7 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
 @SuppressWarnings("serial")
+
 public class mainScreen extends JFrame {
 	
 	private JPanel cards;
@@ -70,9 +79,13 @@ public class mainScreen extends JFrame {
 	Sort sort = new Sort();
 	String sortString;
 	int[] numbers;
+
+
 	
-	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
+		long startTime = System.currentTimeMillis();
+		long elapsedTime;
+		setOut();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -85,6 +98,8 @@ public class mainScreen extends JFrame {
 				}
 			}
 		});
+		elapsedTime = System.currentTimeMillis() - startTime;
+		System.out.println(elapsedTime + " millis to load the application");
 	}
 	
 	
@@ -154,6 +169,19 @@ public class mainScreen extends JFrame {
 		});
 		mnFunctions.add(mntmSorting);
 		
+		JSeparator separator_1 = new JSeparator();
+		mnFunctions.add(separator_1);
+		
+		JMenuItem mntmConsole = new JMenuItem("Console");
+		mntmConsole.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CardLayout cl = (CardLayout) (cards.getLayout());
+	            cl.show(cards, "ConsolePanel");
+	            System.out.println("ConsolePanel selected");
+			}
+		});
+		mnFunctions.add(mntmConsole);
+		
 		JMenu mnHelp = new JMenu("Help");
 		menuBar.add(mnHelp);
 		
@@ -204,7 +232,7 @@ public class mainScreen extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				long start;
 				long finish;
-				start = System.nanoTime();
+				start = System.currentTimeMillis();
 				
 				PiNth = Integer.parseInt(PiEnterField.getText());
 				final JTextArea PiTextArea = new JTextArea();
@@ -212,8 +240,8 @@ public class mainScreen extends JFrame {
 				PiTextArea.setText(pi.piAlg(PiNth));
 				PiTextArea.setLineWrap(true);
 				PiScrollPane.setViewportView(PiTextArea);
-				finish = (System.nanoTime() - start)/1000000000;
-				System.out.println(PiNth + " digits of Pi were calculated in " + finish + " second(s)");
+				finish = (System.currentTimeMillis() - start);
+				System.out.println(PiNth + " digits of Pi were calculated in " + finish + " milliseconds");
 			}
 		});
 		
@@ -350,18 +378,53 @@ public class mainScreen extends JFrame {
 				}
 			}
 		});
-		SortButton.setBounds(673, 19, 189, 40);
+		SortButton.setBounds(673, 6, 189, 40);
 		SortingPanel.add(SortButton);
+		
+		JButton btnRandomNumbers = new JButton("Random Numbers");
+		btnRandomNumbers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			
+				SortInputTextArea.setText("");
+				int randomNumbers = (int) (Math.random() * 1000);
+				for (int i = 0; i < randomNumbers; i ++) {
+					int random = (int) (Math.random() * 100000);
+					SortInputTextArea.append(random + " ");	
+				}
+				System.out.println(randomNumbers + " random numbers where generated to sort");
+			}
+		});
+		btnRandomNumbers.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		btnRandomNumbers.setBounds(673, 52, 189, 21);
+		SortingPanel.add(btnRandomNumbers);
 		
 		JLabel SortingTitle = new JLabel("");
 		SortingTitle.setIcon(new ImageIcon(mainScreen.class.getResource("/resources/SortingTitleHeader.png")));
 		SortingTitle.setBounds(6, 6, 888, 243);
 		SortingPanel.add(SortingTitle);
 		
+		JPanel ConsolePanel = new JPanel();
+		cards.add(ConsolePanel, "ConsolePanel");
+		ConsolePanel.setLayout(null);
+
+		JScrollPane ConsoleScrollPane = new JScrollPane();
+		ConsoleScrollPane.setBounds(6, 6, 888, 544);
+		ConsolePanel.add(ConsoleScrollPane);
 		
-		System.out.println("STARTED SUCCESSFULLY");
+		JTextArea ConsoleTextArea = new JTextArea();
+		ConsoleTextArea.setLineWrap(true);
+		ConsoleTextArea.setFont(new Font("Myriad Pro", Font.PLAIN, 26));
+		ConsoleScrollPane.setViewportView(ConsoleTextArea);
 	}
 	
+	public static void setOut() throws FileNotFoundException {
+		PrintStream console = System.out;
+
+		File file = new File("src/main/console.txt");
+		FileOutputStream fos = new FileOutputStream(file);
+		PrintStream ps = new PrintStream(fos);
+		System.setOut(ps);
+	}
 	
 	public void itemStateChanged(ItemEvent evt) {
         CardLayout cl = (CardLayout) (cards.getLayout());
