@@ -241,7 +241,7 @@ public class mainScreen extends JFrame {
 		Info.add(Information);
 		
 		JLabel Logo = new JLabel("");
-		Logo.setIcon(new ImageIcon(mainScreen.class.getResource("/resources/splashscreen.png")));
+		Logo.setIcon(new ImageIcon(mainScreen.class.getResource("/resources/splashscreen1.png")));
 		Logo.setBounds(6, 38, 889, 462);
 		SPLASHSCREEN.add(Logo);
 		

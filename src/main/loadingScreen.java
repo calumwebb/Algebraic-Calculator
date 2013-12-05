@@ -62,7 +62,7 @@ public class loadingScreen extends JFrame {
         int progress = 0;
         progressBar.setValue(0);
         try {
-            Thread.sleep(10 + random.nextInt(200));
+            Thread.sleep(10 + random.nextInt(350));
         } catch (InterruptedException ignore) {}
         int counter = 0;
         while (progress < 100) {

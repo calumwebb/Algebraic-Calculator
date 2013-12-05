@@ -1,2 +1,3 @@
-[Information] 18:02:00: Algebraic Calculator has been successfully loaded!
-[Information] 18:02:00: 1683 milliseconds to load the application
+[Information] 18:26:54: Algebraic Calculator has been successfully loaded!
+[Information] 18:26:54: 2121 milliseconds to load the application
+[Information] 18:26:56: Trigonometry Panel loaded
