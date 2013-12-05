@@ -1,3 +1,2 @@
-13 millis to load the application
-splashscreen selected
-ConsolePanel selected
+[Information] 18:02:00: Algebraic Calculator has been successfully loaded!
+[Information] 18:02:00: 1683 milliseconds to load the application
