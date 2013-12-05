@@ -1,12 +1,19 @@
-Algebriac-Calculator
+Algebraic-Calculator
 =====================================================
-This is a project I started for my EPQ in September
-2013. It is designed to have functions such as:
-- Algebriac Equation Solving
-- Calculating Pi
-- Calculator Functions
-- Solving Quadratics / Cubics
-- Sorting Algorithms
+This mathematical tool is a project for an Extended
+Project Qualification whichs aim is to help
+mathematicians. The project was coded in Java
+Programming language and can be run on both Windows
+and Macintoshes (if java is installed)
 
+Full List of Features (So far): 
+- Quadratic and Cubic equation solver
+- Sorting Algorithms for lists of numbers
+  - Bubble sort in Ascending / Discending order
+- Calculating Pi to N'th digit (Fastest way possible)
+- Trigonometric Functions
+
+
+All code was written using Eclipse on a Mac
 =====================================================
-Algebriac Calculator Designed and Coded by Calum Webb
+Algebraic Calculator Designed and Coded by Calum Webb
