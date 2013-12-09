@@ -2,6 +2,7 @@ package backend;
 
 import java.math.*;
 
+@SuppressWarnings("unused")
 public class QuadraticEquation {
 
 	public static void main (String[] args) {

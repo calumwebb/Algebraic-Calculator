@@ -7,7 +7,6 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.beans.PropertyChangeEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,8 +16,6 @@ import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Random;
-
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -29,15 +26,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
-import javax.swing.SwingWorker;
-
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import backend.Pi;
@@ -45,19 +39,13 @@ import backend.QuadraticEquation;
 import backend.Sort;
 import backend.TrigonometricFunctions;
 
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JProgressBar;
-import javax.swing.JSpinner;
-import javax.swing.JToggleButton;
 import javax.swing.JRadioButton;
-import javax.swing.border.EmptyBorder;
 
 @SuppressWarnings("serial")
 
 public class mainScreen extends JFrame {
 	
 	private JPanel cards;
-	private JPanel contentPane;
 	private JTextField PiEnterField;
 	private JTextField quad3TextField;
 	private JTextField quad2TextField;
@@ -69,6 +57,8 @@ public class mainScreen extends JFrame {
 	static String a = ": ";
 	static String error = "[error] " + time() + ": ";
 	static String function = "[Function] ";
+	
+	// calculator variables
 	
 	// pi variables
 	Pi pi = new Pi();
@@ -95,8 +85,6 @@ public class mainScreen extends JFrame {
 	// Trig variables
 	TrigonometricFunctions trig = new TrigonometricFunctions();
 	String textfield;
-
-	
 	public static void main(String[] args) throws FileNotFoundException {
 		long startTime = System.currentTimeMillis();
 		long elapsedTime;
@@ -163,7 +151,27 @@ public class mainScreen extends JFrame {
 		JSeparator separator = new JSeparator();
 		mnFunctions.add(separator);
 		
-		JMenuItem mntmPiNthDigit = new JMenuItem("Pi Calculator");
+		JMenuItem mntmCalculator = new JMenuItem("Calculator");
+		mntmCalculator.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				calculatorScreen.init();
+				System.out.println(info + time() + a + "Calculator Window loaded");
+			}
+		});
+		mnFunctions.add(mntmCalculator);
+		
+		JSeparator separator_4 = new JSeparator();
+		mnFunctions.add(separator_4);
+		
+		JMenu mnNthDigit = new JMenu("Nth Digit");
+		mnFunctions.add(mnNthDigit);
+		
+		JMenuItem mntmPiNthDigit = new JMenuItem("Pi to Nth Digit");
+		mnNthDigit.add(mntmPiNthDigit);
+		
+		JMenuItem mntmEToNth = new JMenuItem("e to Nth Digit");
+		mnNthDigit.add(mntmEToNth);
+		mntmEToNth.setEnabled(false);
 		mntmPiNthDigit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				CardLayout cl = (CardLayout) (cards.getLayout());
@@ -171,9 +179,15 @@ public class mainScreen extends JFrame {
 	            System.out.println(info + time() + a + "Pi Panel loaded");
 			}
 		});
-		mnFunctions.add(mntmPiNthDigit);
 		
-		JMenuItem mntmQuadratic = new JMenuItem("Quadratic Solver");
+		JMenu mnSolvers = new JMenu("Solvers");
+		mnFunctions.add(mnSolvers);
+		
+		JMenuItem mntmQuadratic = new JMenuItem("Quadratic Equations");
+		mnSolvers.add(mntmQuadratic);
+		
+		JMenuItem mntmCubicEquations = new JMenuItem("Cubic Equations");
+		mnSolvers.add(mntmCubicEquations);
 		mntmQuadratic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				CardLayout cl = (CardLayout) (cards.getLayout());
@@ -181,18 +195,19 @@ public class mainScreen extends JFrame {
 	            System.out.println(info + time() + a + "Quadratic Equation Panel loaded");
 			}
 		});
-		mnFunctions.add(mntmQuadratic);
+		
+		JMenu mnExtras = new JMenu("Extras");
+		mnFunctions.add(mnExtras);
 		
 		JMenuItem mntmSorting = new JMenuItem("Sorting");
-		mntmSorting.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				CardLayout cl = (CardLayout) (cards.getLayout());
-	            cl.show(cards, "SortingPanel");
-	            System.out.println(info + time() + a + "Sorting Panel loaded");
-			}
-		});
+		mnExtras.add(mntmSorting);
+		
+		JMenuItem mntmBinaryConverter = new JMenuItem("Binary Converter");
+		mnExtras.add(mntmBinaryConverter);
+		mntmBinaryConverter.setEnabled(false);
 		
 		JMenuItem mntmTrigonometry = new JMenuItem("Trigonometry");
+		mnExtras.add(mntmTrigonometry);
 		mntmTrigonometry.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				CardLayout cl = (CardLayout) (cards.getLayout());
@@ -200,8 +215,13 @@ public class mainScreen extends JFrame {
 	            System.out.println(info + time() + a + "Trigonometry Panel loaded");
 			}
 		});
-		mnFunctions.add(mntmTrigonometry);
-		mnFunctions.add(mntmSorting);
+		mntmSorting.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CardLayout cl = (CardLayout) (cards.getLayout());
+	            cl.show(cards, "SortingPanel");
+	            System.out.println(info + time() + a + "Sorting Panel loaded");
+			}
+		});
 		
 		JSeparator separator_1 = new JSeparator();
 		mnFunctions.add(separator_1);
@@ -236,12 +256,12 @@ public class mainScreen extends JFrame {
 		JLabel Information = new JLabel("");
 		Information.setEnabled(false);
 		Information.setToolTipText("");
-		Information.setIcon(new ImageIcon(mainScreen.class.getResource("/resources/info.png")));
+		Information.setIcon(new ImageIcon(mainScreen.class.getResource("/res/info.png")));
 		Information.setBounds(6, 6, 888, 516);
 		Info.add(Information);
 		
 		JLabel Logo = new JLabel("");
-		Logo.setIcon(new ImageIcon(mainScreen.class.getResource("/resources/splashscreen1.png")));
+		Logo.setIcon(new ImageIcon(mainScreen.class.getResource("/res/splashscreen1.png")));
 		Logo.setBounds(6, 38, 889, 462);
 		SPLASHSCREEN.add(Logo);
 		
@@ -284,7 +304,7 @@ public class mainScreen extends JFrame {
 		
 		
 		JLabel PiTitle = new JLabel("");
-		PiTitle.setIcon(new ImageIcon(mainScreen.class.getResource("/resources/piTitleBar.png")));
+		PiTitle.setIcon(new ImageIcon(mainScreen.class.getResource("/res/piTitleBar.png")));
 		PiTitle.setBounds(6, 6, 888, 287);
 		PiPanel.add(PiTitle);
 		
@@ -351,7 +371,7 @@ public class mainScreen extends JFrame {
 		JLabel QuadEquationTitle = new JLabel("");
 		QuadEquationTitle.setFont(new Font("Myriad Pro", Font.PLAIN, 16));
 		QuadEquationTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		QuadEquationTitle.setIcon(new ImageIcon(mainScreen.class.getResource("/resources/QuadEquation1.png")));
+		QuadEquationTitle.setIcon(new ImageIcon(mainScreen.class.getResource("/res/QuadEquation1.png")));
 		QuadEquationTitle.setBounds(0, 0, 900, 550);
 		QuadraticPanel.add(QuadEquationTitle);
 		
@@ -387,7 +407,7 @@ public class mainScreen extends JFrame {
 				sortString = SortInputTextArea.getText();
 				if (order == "Ascending") {
 					numbers = Sort.BubbleSortA(sortString);
-						String temp = SortInputTextArea.getText();
+						SortInputTextArea.getText();
 						SortInputTextArea.setText("");
 					for (int i = 0; i < numbers.length; i++ ) {
 						SortInputTextArea.append(Integer.toString(numbers[i]) + " ");
@@ -395,7 +415,7 @@ public class mainScreen extends JFrame {
 					System.out.println(function + time() + a +  "Sorted " + numbers.length + " numbers using bubble sort in ascending order");
 				} else {
 					numbers = Sort.BubbleSortD(sortString);
-					String temp = SortInputTextArea.getText();
+					SortInputTextArea.getText();
 					SortInputTextArea.setText("");
 				for (int i = 0; i < numbers.length; i++ ) {
 					SortInputTextArea.append(Integer.toString(numbers[i]) + " ");
@@ -425,7 +445,7 @@ public class mainScreen extends JFrame {
 		SortingPanel.add(btnRandomNumbers);
 		
 		JLabel SortingTitle = new JLabel("");
-		SortingTitle.setIcon(new ImageIcon(mainScreen.class.getResource("/resources/SortingTitleHeader.png")));
+		SortingTitle.setIcon(new ImageIcon(mainScreen.class.getResource("/res/SortingTitleHeader.png")));
 		SortingTitle.setBounds(6, 6, 888, 243);
 		SortingPanel.add(SortingTitle);
 		
@@ -438,6 +458,7 @@ public class mainScreen extends JFrame {
 		ConsolePanel.add(ConsoleScrollPane);
 		
 		final JTextArea ConsoleTextArea = new JTextArea();
+		ConsoleTextArea.setEditable(false);
 		ConsoleTextArea.setLineWrap(true);
 		ConsoleTextArea.setFont(new Font("Myriad Pro", Font.PLAIN, 21));
 		ConsoleScrollPane.setViewportView(ConsoleTextArea);
@@ -491,19 +512,19 @@ public class mainScreen extends JFrame {
 				String choice = ChoiceTrigBox.getSelectedItem().toString();
 				if (rdbtnInverse.isSelected()){
 					if (choice == "Radians") {
-						txtEnterSine.setText(trig.aSineRad(angle));
-						System.out.println(function + time() + a + "Sin-1(" + angle + ") in Radians was calculated to be " + trig.aSineRad(angle));
+						txtEnterSine.setText(TrigonometricFunctions.aSineRad(angle));
+						System.out.println(function + time() + a + "Sin-1(" + angle + ") in Radians was calculated to be " + TrigonometricFunctions.aSineRad(angle));
 					} else {
-						txtEnterSine.setText(trig.aSineDeg(angle));
-						System.out.println(function + time() + a + "Sin-1(" + angle + ") in Degrees was calculated to be " + trig.aSineRad(angle));
+						txtEnterSine.setText(TrigonometricFunctions.aSineDeg(angle));
+						System.out.println(function + time() + a + "Sin-1(" + angle + ") in Degrees was calculated to be " + TrigonometricFunctions.aSineRad(angle));
 					}
 				} else {
 					if (choice == "Radians") {
-						txtEnterSine.setText(trig.SineRad(angle));
-						System.out.println(function + time() + a + "Sin(" + angle + ") in Radians was calculated to be " + trig.SineRad(angle));
+						txtEnterSine.setText(TrigonometricFunctions.SineRad(angle));
+						System.out.println(function + time() + a + "Sin(" + angle + ") in Radians was calculated to be " + TrigonometricFunctions.SineRad(angle));
 					} else {
-						txtEnterSine.setText(trig.SineDeg(angle));
-						System.out.println(function + time() + a + "Sin(" + angle + ") in Degrees was calculated to be " + trig.SineRad(angle));
+						txtEnterSine.setText(TrigonometricFunctions.SineDeg(angle));
+						System.out.println(function + time() + a + "Sin(" + angle + ") in Degrees was calculated to be " + TrigonometricFunctions.SineRad(angle));
 					}
 				}
 			}
@@ -524,19 +545,19 @@ public class mainScreen extends JFrame {
 				String choice = ChoiceTrigBox.getSelectedItem().toString();
 				if (rdbtnInverse.isSelected()){
 					if (choice == "Radians") {
-						txtEnterCosine.setText(trig.aCosineRad(angle));
-						System.out.println(function + time() + a + "Cos-1(" + angle + ") in Radians was calculated to be " + trig.aCosineRad(angle));
+						txtEnterCosine.setText(TrigonometricFunctions.aCosineRad(angle));
+						System.out.println(function + time() + a + "Cos-1(" + angle + ") in Radians was calculated to be " + TrigonometricFunctions.aCosineRad(angle));
 					} else {
-						txtEnterCosine.setText(trig.aCosineDeg(angle));
-						System.out.println(function + time() + a + "Cos-1(" + angle + ") in Degrees was calculated to be " + trig.aCosineRad(angle));
+						txtEnterCosine.setText(TrigonometricFunctions.aCosineDeg(angle));
+						System.out.println(function + time() + a + "Cos-1(" + angle + ") in Degrees was calculated to be " + TrigonometricFunctions.aCosineRad(angle));
 					}
 				} else {
 					if (choice == "Radians") {
-						txtEnterCosine.setText(trig.CosineRad(angle));
-						System.out.println(function + time() + a + "Cos(" + angle + ") in Radians was calculated to be " + trig.CosineRad(angle));
+						txtEnterCosine.setText(TrigonometricFunctions.CosineRad(angle));
+						System.out.println(function + time() + a + "Cos(" + angle + ") in Radians was calculated to be " + TrigonometricFunctions.CosineRad(angle));
 					} else {
-						txtEnterCosine.setText(trig.CosineDeg(angle));
-						System.out.println(function + time() + a + "Cos(" + angle + ") in Degrees was calculated to be " + trig.CosineRad(angle));
+						txtEnterCosine.setText(TrigonometricFunctions.CosineDeg(angle));
+						System.out.println(function + time() + a + "Cos(" + angle + ") in Degrees was calculated to be " + TrigonometricFunctions.CosineRad(angle));
 					}
 				}
 			}
@@ -557,19 +578,19 @@ public class mainScreen extends JFrame {
 				String choice = ChoiceTrigBox.getSelectedItem().toString();
 				if (rdbtnInverse.isSelected()){
 					if (choice == "Radians") {
-						txtEnterTan.setText(trig.aTanRad(angle));
-						System.out.println(function + time() + a + "Tan-1(" + angle + ") in Radians was calculated to be " + trig.aTanRad(angle));
+						txtEnterTan.setText(TrigonometricFunctions.aTanRad(angle));
+						System.out.println(function + time() + a + "Tan-1(" + angle + ") in Radians was calculated to be " + TrigonometricFunctions.aTanRad(angle));
 					} else {
-						txtEnterTan.setText(trig.aTanDeg(angle));
-						System.out.println(function + time() + a + "Tan-1(" + angle + ") in Degrees was calculated to be " + trig.aTanRad(angle));
+						txtEnterTan.setText(TrigonometricFunctions.aTanDeg(angle));
+						System.out.println(function + time() + a + "Tan-1(" + angle + ") in Degrees was calculated to be " + TrigonometricFunctions.aTanRad(angle));
 					}
 				} else {
 					if (choice == "Radians") {
-						txtEnterTan.setText(trig.TanRad(angle));
-						System.out.println(function + time() + a + "Tan(" + angle + ") in Radians was calculated to be " + trig.TanRad(angle));
+						txtEnterTan.setText(TrigonometricFunctions.TanRad(angle));
+						System.out.println(function + time() + a + "Tan(" + angle + ") in Radians was calculated to be " + TrigonometricFunctions.TanRad(angle));
 					} else {
-						txtEnterTan.setText(trig.TanDeg(angle));
-						System.out.println(function + time() + a + "Tan(" + angle + ") in Degrees was calculated to be " + trig.TanRad(angle));
+						txtEnterTan.setText(TrigonometricFunctions.TanDeg(angle));
+						System.out.println(function + time() + a + "Tan(" + angle + ") in Degrees was calculated to be " + TrigonometricFunctions.TanRad(angle));
 					}
 				}
 			}
@@ -587,12 +608,12 @@ public class mainScreen extends JFrame {
 		TrigPanel.add(separator_3);
 		
 		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setIcon(new ImageIcon(mainScreen.class.getResource("/resources/DegorRad.png")));
+		lblNewLabel.setIcon(new ImageIcon(mainScreen.class.getResource("/res/DegorRad.png")));
 		lblNewLabel.setBounds(595, 16, 262, 36);
 		TrigPanel.add(lblNewLabel);
 		
 		JLabel TrigBackground = new JLabel("");
-		TrigBackground.setIcon(new ImageIcon(mainScreen.class.getResource("/resources/TriggTitle.png")));
+		TrigBackground.setIcon(new ImageIcon(mainScreen.class.getResource("/res/TriggTitle.png")));
 		TrigBackground.setBounds(6, 6, 888, 544);
 		TrigPanel.add(TrigBackground);
 		
@@ -601,7 +622,7 @@ public class mainScreen extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try
                 {
-                    FileReader reader = new FileReader( "src/main/console.txt" );
+                    FileReader reader = new FileReader( "src/res/console.txt" );
                     BufferedReader br = new BufferedReader(reader);
                     ConsoleTextArea.read( br, null );
                     br.close();
@@ -619,9 +640,7 @@ public class mainScreen extends JFrame {
 	
 
 	public static void setOut() throws FileNotFoundException {
-		PrintStream console = System.out;
-
-		File file = new File("src/main/console.txt");
+		File file = new File("src/res/console.txt");
 		FileOutputStream fos = new FileOutputStream(file);
 		PrintStream ps = new PrintStream(fos);
 		System.setOut(ps);

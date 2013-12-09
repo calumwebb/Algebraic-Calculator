@@ -2,6 +2,7 @@ package backend;
 
 import java.math.*;
 
+@SuppressWarnings("unused")
 public class TrigonometricFunctions {
 
 	public static String aSineDeg(double d) {

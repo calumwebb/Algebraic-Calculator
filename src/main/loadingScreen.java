@@ -46,7 +46,7 @@ public class loadingScreen extends JFrame {
 		Panel.setLayout(null);
 		
 		JLabel Logo = new JLabel("");
-		Logo.setIcon(new ImageIcon(loadingScreen.class.getResource("/resources/loading.png")));
+		Logo.setIcon(new ImageIcon(loadingScreen.class.getResource("/res/loading.png")));
 		Logo.setBounds(12, 6, 438, 356);
 		Panel.add(Logo);
 		

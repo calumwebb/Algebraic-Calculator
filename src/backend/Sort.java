@@ -2,6 +2,7 @@ package backend;
 
 import java.lang.reflect.Array;
 
+@SuppressWarnings("unused")
 public class Sort {
 
 	public static void main(String[] args) {

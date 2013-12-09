@@ -1,0 +1,7 @@
+[Information] 02:04:29: Algebraic Calculator has been successfully loaded!
+[Information] 02:04:29: 2310 milliseconds to load the application
+[Information] 02:04:34: Pi Panel loaded
+[Information] 02:04:35: Console Panel loaded
+[Information] 02:04:38: Pi Panel loaded
+[Function] 02:04:39: 23 digits of Pi were calculated in 2 milliseconds
+[Information] 02:04:42: Console Panel loaded
