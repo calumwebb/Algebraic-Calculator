@@ -12,6 +12,7 @@ Full List of Features (So far):
   - Bubble sort in Ascending / Discending order
 - Calculating Pi to N'th digit (Fastest way possible)
 - Trigonometric Functions
+- Fully functioning Calculator with gui
 
 
 All code was written using Eclipse on a Mac
